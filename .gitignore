@@ -1,0 +1,14 @@
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# IDE and Editor folders
+.idea/
+.vscode/
+*.swp
+*~
+
+# MacOS Specific
+.DS_Store
