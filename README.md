@@ -11,7 +11,8 @@ A log file optimized for SSDs and high concurrency in Go. Useful for implementin
 
 Most log file implementations flush after every write. This one batches concurrent writers into a single IO + fsync, which makes a huge difference on SSDs.
 
-**Important:** Performance scales with concurrency. With a single writer, you'll just get a normal fsync per write. The magic happens when many goroutines write at the same time.
+> [!WARNING]
+> Performance scales with concurrency. With a single writer, you'll just get a normal fsync per write. The magic happens when many goroutines write at the same time.
 
 ## How it works
 
@@ -25,6 +26,23 @@ Most log file implementations flush after every write. This one batches concurre
 
 ```
 go get github.com/alialaee/logfile
+```
+
+## Usage
+
+```go
+f, _ := os.OpenFile("my.log", os.O_CREATE|os.O_RDWR, 0644)
+
+lf, _ := logfile.New(f, 0, 1024*1024, true) // 1MB buffer, CRC enabled
+
+offset, _ := lf.Write(context.Background(), []byte("hello world"))
+
+// Read back
+reader := logfile.NewReader(f, 0)
+data, _ := reader.ReadNext(nil)
+
+lf.Close()
+f.Close()
 ```
 
 ## License
