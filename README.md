@@ -28,6 +28,7 @@ This design provides the same durability guarantees as calling `fsync` after eve
 - **Extremely safe:** no torn writes, an when a Write call returns, the data is guaranteed to be on disk
 - **High concurrency:** many writers can write at the same time, and the performance scales with the number of concurrent writers
 - **CRC32 checksums** for data integrity (optional)
+- **Simple API:** Write() is blocking and safe (and encouraged) to call from hundreds of goroutines. No callbacks or background flushers.
 
 ## Install
 
