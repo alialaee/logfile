@@ -268,6 +268,14 @@ func (w *LogFile) Close() error {
 
 // flushLocked performs the IO for flushing. It MUST be called with w.mu locked.
 // It unlocks w.mu to perform the blocking IO, then re-locks it before returning.
+//
+// NOTE FOR SAFETY: writeOffset is always 4KB-aligned and len(w.alignedBuf)
+// is always a multiple of 4KB, so each 4KB sector is written atomically
+// by the SSD.
+// The tail sector (containing previously-synced data) is either fully
+// rewritten or untouched on crash. We don't have torn-write risk unless
+// the SSD itself has a hardware failure, in which case the whole sector
+// would be lost anyway.
 func (w *LogFile) flushLocked() {
 	w.isFlushing = true
 	toWrite := w.buf

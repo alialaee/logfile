@@ -14,13 +14,13 @@ Most log file implementations flush after every write. This one batches concurre
 > [!WARNING]
 > Performance scales with concurrency. With a single writer, you'll just get a normal fsync per write. The magic happens when many goroutines write at the same time.
 
-## How it works
+## Features
 
 - **Group commit:** concurrent writers are batched into one write + fsync
-- **4KB-aligned writes:** padded to SSD sector boundaries
-- **Record framing:** each record gets a 9-byte header (marker, length, CRC32)
+- **Optimized for SSDs:** minimizes write amplification and maximizes throughput with 4KB-aligned writes
 - **Zero heap allocations** per write
-- **Ping-pong buffer:** one buffer accepts writes while the other flushes
+- **Extremely safe:** no torn writes, an when a Write call returns, the data is guaranteed to be on disk
+- **High concurrency:** many writers can write at the same time, and the performance scales with the number of concurrent writers
 
 ## Install
 
