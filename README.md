@@ -36,6 +36,40 @@ This design provides the same durability guarantees as calling `fsync` after eve
 go get github.com/alialaee/logfile
 ```
 
+## Benchmarks
+
+See [benchmark/README.md](benchmark/README.md).
+
+Here's the latest result from my laptop (M4 MacBook Air 2025, on-battery):
+
+```
+=== Logfile Write (This library)
+Total bytes written: 477 MB
+Time taken: 576.585416ms
+Throughput: 828.85 MB/s
+
+=== Direct File Write+Flush ===
+Total bytes written: 119 MB
+Time taken: 1.022756167s
+Throughput: 116.82 MB/s
+
+=== Tidwall WAL Write ===
+Total bytes written: 119 MB
+Time taken: 1.117973042s
+Throughput: 106.87 MB/s
+
+=== Hashicorp Raft Write ===
+Total bytes written: 119 MB
+Time taken: 1.197531459s
+Throughput: 99.77 MB/s
+
+=== Pebble Record Write ===
+Total bytes written: 477 MB
+Time taken: 678.86125ms
+Throughput: 703.98 MB/s
+```
+
+
 ## Usage
 
 ```go
